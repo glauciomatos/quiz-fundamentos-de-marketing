@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quiz Fundamentos de Marketing · ESPM</title>
+<meta name="theme-color" content="#A41A2E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --steel:#14191f; --steel-2:#1c232c; --steel-3:#28313c; --line:#38434f;
+  --fg:#eef1f4; --muted:#9aa6b2;
+  --signal:#ffc61a; --signal-ink:#1a1400;
+  --ok:#2fbf71; --bad:#ef4f4f;
+  --a0:#e8590c; --a1:#1c7ed6; --a2:#2b9a4a; --a3:#8a4fd8;
+  --display:"Archivo Black","Arial Black",Impact,sans-serif;
+  --body:"Archivo","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--steel);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.045) 1px,transparent 0);background-size:22px 22px}
+.app{max-width:1280px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-block:16px 24px;gap:16px}
+.app.phone{max-width:560px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+.hazard{height:10px;border-radius:2px;background:repeating-linear-gradient(-45deg,var(--signal) 0 14px,var(--steel) 14px 28px)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--signal)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:10px;font-weight:800;font-size:17px;background:var(--signal);color:var(--signal-ink);box-shadow:0 4px 0 #b88a00;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #b88a00}
+.btn.ghost{background:var(--steel-3);color:var(--fg);box-shadow:0 4px 0 #0b0e12}
+.btn.small{padding:8px 14px;font-size:14px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:20px}
+.chip{font-family:var(--mono);font-size:13px;padding:6px 10px;border-radius:999px;background:var(--steel-3);color:var(--muted);white-space:nowrap}
+.chip b{color:var(--fg)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spacer{flex:1}
+.net{display:inline-flex;align-items:center;gap:6px}
+.net::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--bad)}
+.net.on::before{background:var(--ok)}
+.muted{color:var(--muted)}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.pop{animation:none}}
+
+/* ---------- PROFESSOR ---------- */
+.lobby{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
+.joincard{background:#fff;color:#111;border-radius:18px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.joincard .step{font-size:18px;font-weight:600}
+.joincard .url{font-family:var(--mono);font-size:15px;font-weight:700;word-break:break-all}
+.joincard .pin{font-family:var(--display);font-size:56px;letter-spacing:.06em;line-height:1}
+#qr{width:100%;max-width:360px;aspect-ratio:1}
+#qr svg{width:100%;height:100%;display:block}
+.players{background:var(--steel-2);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px;min-height:300px}
+.players .count{font-family:var(--display);font-size:44px;line-height:1}
+.names{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.name{display:inline-flex;align-items:center;gap:6px;background:var(--steel-3);border-radius:10px;padding:8px 8px 8px 12px;font-weight:800;font-size:17px}
+.name button{width:26px;height:26px;border-radius:6px;color:var(--muted);display:grid;place-items:center}
+.name button:hover{background:var(--bad);color:#fff}
+.empty{color:var(--muted);border:2px dashed var(--line);border-radius:12px;padding:24px;text-align:center}
+.settings{display:flex;gap:14px;flex-wrap:wrap;align-items:end}
+.settings label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+select{font:600 16px var(--body);background:var(--steel);color:var(--fg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+.qcard{background:#fff;color:#111;border-radius:16px;padding:22px 20px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.qcard .tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6a5600;background:#fff2c2;padding:4px 10px;border-radius:999px}
+.qcard h2{font-family:var(--body);font-weight:800;font-size:clamp(22px,3.6vw,42px);line-height:1.18;max-width:36ch}
+.qhead{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.bigclock{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:40px;background:var(--steel-3);border:5px solid var(--signal);font-variant-numeric:tabular-nums}
+.bigclock.low{border-color:var(--bad);color:var(--bad)}
+.answered{text-align:center}
+.answered b{display:block;font-family:var(--display);font-size:40px;line-height:1}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ans{position:relative;display:flex;align-items:center;gap:12px;text-align:left;min-height:96px;padding:14px 16px;border-radius:12px;color:#fff;font-weight:800;font-size:clamp(17px,2.2vw,26px);line-height:1.2;box-shadow:0 5px 0 rgba(0,0,0,.35);transition:opacity .25s,filter .25s,transform .08s;overflow:hidden}
+.ans .ico{flex:none;width:44px;height:44px;display:grid;place-items:center;background:rgba(0,0,0,.18);border-radius:10px}
+.ans .txt{min-width:0;flex:1}
+.ans.c0{background:var(--a0)}.ans.c1{background:var(--a1)}.ans.c2{background:var(--a2)}.ans.c3{background:var(--a3)}
+.reveal .ans.wrong{opacity:.3;filter:grayscale(.6)}
+.reveal .ans.right{outline:5px solid #fff;outline-offset:-5px}
+.ans .cnt{flex:none;font-family:var(--display);font-size:28px;background:rgba(0,0,0,.25);border-radius:8px;padding:2px 10px;min-width:2.2ch;text-align:center}
+.ans .mark{flex:none;font-size:26px}
+.explain{background:var(--steel-2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:20px}
+.explain b{color:var(--signal)}
+.bar-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.board{display:flex;flex-direction:column;gap:10px;max-width:900px;width:100%;margin:0 auto}
+.board h2{font-size:clamp(30px,4vw,48px);text-align:center}
+.rank{display:grid;grid-template-columns:56px 1fr auto auto;gap:14px;align-items:center;background:var(--steel-2);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:clamp(18px,2vw,24px)}
+.rank .pos{font-family:var(--display);color:var(--signal);font-size:1.2em}
+.rank .nm{font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank .pt{font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums}
+.rank .gain{font-family:var(--mono);font-size:.75em;color:var(--ok);min-width:5ch;text-align:right}
+.rank.top{background:color-mix(in srgb,var(--signal) 14%,var(--steel-2));border-color:var(--signal)}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:end;max-width:900px;margin:0 auto;width:100%}
+.pod{border-radius:14px 14px 4px 4px;padding:16px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;justify-content:flex-end;background:var(--steel-3)}
+.pod .p{font-family:var(--display);font-size:42px;line-height:1}
+.pod .n{font-weight:800;font-size:22px;word-break:break-word}
+.pod .s{font-family:var(--mono)}
+.pod.g{background:var(--signal);color:var(--signal-ink);min-height:250px}
+.pod.s2{min-height:200px}.pod.s3{min-height:160px}
+.table-wrap{overflow-x:auto;max-width:900px;margin:0 auto;width:100%}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--steel);padding:10px 16px;border-radius:10px;font-weight:800;z-index:9}
+
+/* ---------- ALUNO ---------- */
+.center{flex:1;display:grid;place-items:center}
+.box{width:100%;max-width:440px;background:var(--steel-2);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.box h2{font-size:28px;line-height:1.08}
+.field{width:100%;font:800 22px var(--body);padding:14px 16px;border-radius:10px;border:2px solid var(--line);background:var(--steel);color:var(--fg);text-align:center}
+.field:focus{border-color:var(--signal);outline:none}
+.label{font-weight:600;font-size:14px;color:var(--muted)}
+.ptiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:52vh}
+.ptiles.tf{min-height:40vh}
+.ptiles .ans{min-height:0;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-size:16px;padding:12px 8px;gap:8px}
+.ptiles .ans .ico{width:52px;height:52px}
+.ptiles .ans:active{transform:translateY(3px)}
+.ptiles .ans .ico svg{width:30px;height:30px}
+.pq{font-weight:800;font-size:17px;line-height:1.25}
+.ptimer{height:10px;border-radius:5px;background:var(--steel-3);overflow:hidden}
+.ptimer i{display:block;height:100%;background:var(--signal);transform-origin:left;width:100%}
+.result{border-radius:18px;padding:28px 20px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.result.ok{background:var(--ok);color:#06210f}
+.result.bad{background:var(--bad);color:#2a0606}
+.result.wait{background:var(--steel-2);border:1px solid var(--line)}
+.result h2{font-size:36px;line-height:1.05}
+.result .big{font-family:var(--display);font-size:52px;line-height:1}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini div{background:var(--steel-2);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.mini b{display:block;font-family:var(--display);font-size:30px;line-height:1.1}
+.mini span{font-size:13px;color:var(--muted)}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--signal);display:inline-block;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.25}}
+
+@media (max-width:900px){
+  .lobby{grid-template-columns:1fr}
+  .qhead{grid-template-columns:1fr auto}
+  .qhead .qcard{grid-column:1/-1;order:-1}
+  .bigclock{width:72px;height:72px;font-size:30px}
+}
+@media (max-width:560px){
+  .answers{grid-template-columns:1fr}
+  .ans{min-height:64px}
+  .podium{gap:8px}.pod .n{font-size:16px}.pod .p{font-size:30px}
+  .rank{grid-template-columns:40px 1fr auto;padding:10px 12px}
+  .rank .gain{display:none}
+}
+
+/* ---------- Identidade ESPM · Gestão de Vendas (cores e fontes dos slides da disciplina) ---------- */
+:root{
+  color-scheme: light;
+  --steel:#F6F3F2; --steel-2:#FFFFFF; --steel-3:#ECE6E4; --line:#D8D2D0;
+  --fg:#2B2B2B; --muted:#6B6B6B;
+  --signal:#A41A2E; --signal-ink:#FFFFFF;
+  --navy:#1F3864; --teal:#1C7C7D;
+  --ok:#1C7C7D; --bad:#A41A2E;
+  --a0:#A41A2E; --a1:#1F3864; --a2:#1C7C7D; --a3:#A86A12;
+  --display:"Caladea", Cambria, Georgia, serif;
+  --body:"Carlito", Calibri, "Segoe UI", Arial, sans-serif;
+  --mono:"Carlito", Calibri, "Segoe UI", Arial, sans-serif;
+}
+body{background-image:none}
+h1,h2,h3{font-weight:700;color:var(--navy)}
+.hazard{height:8px;border-radius:4px;background:linear-gradient(90deg,#C8202F 0%,#B51F31 35%,#9E1830 100%)}
+.btn{box-shadow:0 4px 0 #6B1616}
+.btn:active{box-shadow:0 1px 0 #6B1616}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);box-shadow:0 3px 0 var(--line)}
+.chip{background:#fff;border:1px solid var(--line)}
+.eyebrow{color:var(--signal);letter-spacing:.12em;font-weight:700}
+.brand{color:var(--navy);font-family:var(--display);font-weight:700}
+.logo{display:inline-grid;place-items:center;background:linear-gradient(90deg,#C8202F,#9E1830);border-radius:8px;padding:7px 10px;flex:none}
+.logo img{height:20px;width:auto;display:block}
+.joincard{border:1px solid var(--line);box-shadow:0 6px 20px rgba(31,56,100,.08)}
+.joincard .pin{color:var(--signal)}
+.players,.box,.mod,.explain,.stat,.rank,.result.wait,.mini div{box-shadow:0 2px 10px rgba(31,56,100,.06)}
+.qcard{border:1px solid var(--line);box-shadow:0 6px 20px rgba(31,56,100,.08)}
+.qcard h2{color:var(--navy)}
+.qcard .tag{color:#fff;background:var(--teal)}
+.bigclock{background:#fff;color:var(--navy)}
+.explain{border-left:5px solid var(--teal)}
+.explain b{color:var(--signal)}
+.rank .pos{color:var(--signal)}
+.rank.top{background:#FBEFF0;border-color:var(--signal)}
+.pod{background:#fff;border:1px solid var(--line)}
+.pod.g{background:var(--signal);color:#fff;border:0}
+.pod.g .n,.pod.g .p{color:#fff}
+.pod .p{color:var(--navy)}
+.result.ok{background:var(--teal);color:#fff}
+.result.bad{background:var(--signal);color:#fff}
+.result.ok h2,.result.bad h2{color:#fff}
+.field{background:#fff}
+select{background:#fff}
+.empty{background:#fff}
+.name{background:#F3ECEA;color:var(--navy)}
+.toast{background:var(--navy);color:#fff}
+</style>
+</head>
+<body>
+<div class="app" id="app"><p class="muted">Carregando…</p></div>
+<div id="toastHost"></div>
+<script>
+window.QUIZ = {
+  key: "espm-fm",
+  topic: "espm-fundamentos-marketing/v1/",
+  name: "Quiz Fundamentos de Marketing",
+  eyebrow: "ESPM · Fundamentos de Marketing · Revisão ao vivo",
+  lobbyTitle: "Aguardando a turma",
+  joinTitle: "Entre na sala e mostre o que sabe",
+  endEyebrow: "Fim da rodada",
+  champion: "Destaque da turma!",
+  logo: '<span class="logo"><img src="espm.png" alt="ESPM"></span>'
+};
+</script>
+<script src="mqtt.min.js"></script>
+<script src="qrcode.js"></script>
+<script src="questions.js"></script>
+<script src="icons.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
